@@ -6,12 +6,13 @@ import prisma from 'src/prisma';
 @Injectable()
 export class UserService {
   async create(dto: CreateUserDto) {
-    const hashed = await bcrypt.hash(dto.password, 10);
+    console.log('%c⧭', 'color: #ff0000', bcrypt);
+    // const hashed = await bcrypt.hash(dto.password, 10);
 
     return prisma.user.create({
       data: {
         username: dto.username,
-        password: hashed,
+        password: dto.password,
         name: dto.name,
         remark: dto.remark,
       },
