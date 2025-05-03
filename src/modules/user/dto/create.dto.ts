@@ -2,8 +2,9 @@ import { IsString, IsOptional, IsBoolean, IsDate } from 'class-validator';
 
 export class CreateUserDto {
   @IsOptional()
+
   @IsString()
-  id: string;
+  id?: string;
 
   @IsString()
   username: string;
@@ -18,30 +19,37 @@ export class CreateUserDto {
   isEnable: boolean;
 
   @IsOptional()
+
   @IsDate()
-  createdAt: Date;
+  createdAt?: Date;
 
   @IsOptional()
+
   @IsDate()
-  updatedAt: Date;
+  updatedAt?: Date;
 
   @IsOptional()
+
   @IsDate()
   deletedAt?: Date;
 
   @IsOptional()
+
   @IsString()
   createdBy?: string;
 
   @IsOptional()
+
   @IsString()
   updatedBy?: string;
 
   @IsOptional()
+
   @IsString()
   deleteBy?: string;
 
   @IsOptional()
+
   @IsString()
   remark?: string;
 }

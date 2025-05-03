@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import generateBasicNestFile from './generate-basic-file.mjs';
 
 // 替代 __dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -105,9 +106,15 @@ function writeDtoFile(modelName, type, content) {
 
     const fileName = `${type}.dto.ts`;
     const filePath = path.join(dtoDir, fileName);
+    const backFilePath = path.join(dtoDir, 'back-' + fileName);
 
-    fs.writeFileSync(filePath, content);
-    console.log(`✅ 已生成: ${filePath}`);
+    if (!fs.existsSync(filePath)) {
+      fs.writeFileSync(filePath, content);
+      console.log(`✅ 已生成: ${filePath}`);
+    } else {
+      fs.writeFileSync(backFilePath, content);
+      console.log(`⚠️ 已存在（生成备份）: ${backFilePath}`);
+    }
   } catch (err) {
     console.error(`❌ 生成 ${modelName} 的 ${type} DTO 失败:`, err);
   }
@@ -131,6 +138,7 @@ function run(targetModelName) {
   });
 
   console.log('🎉 所有 DTO 生成完毕');
+  generateBasicNestFile(targetModelName);
 }
 
 // CLI 参数支持：node generate-dto.js User
