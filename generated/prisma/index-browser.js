@@ -120,9 +120,58 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.UserScalarFieldEnum = {
+  id: 'id',
+  username: 'username',
+  password: 'password',
+  name: 'name',
+  avatar: 'avatar',
+  email: 'email',
+  mobile: 'mobile',
+  sex: 'sex',
+  address: 'address',
+  nativeAddress: 'nativeAddress',
+  idCard: 'idCard',
+  isEnable: 'isEnable',
+  loginIpList: 'loginIpList',
+  lastLoginAt: 'lastLoginAt',
+  loginFailCount: 'loginFailCount',
+  loginLockedUnitl: 'loginLockedUnitl',
+  joinTime: 'joinTime',
+  leaveTime: 'leaveTime',
+  position: 'position',
+  department: 'department',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy',
+  updatedAt: 'updatedAt',
+  updatedBy: 'updatedBy',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy',
+  remark: 'remark'
+};
+
+exports.Prisma.SortOrder = {
+  asc: 'asc',
+  desc: 'desc'
+};
+
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+};
+
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
+exports.Sex = exports.$Enums.Sex = {
+  男: '男',
+  女: '女',
+  其他: '其他'
+};
 
 exports.Prisma.ModelName = {
-
+  User: 'User'
 };
 
 /**

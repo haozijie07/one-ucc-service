@@ -13,3 +13,43 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum Sex {
+  男
+  女
+  其他
+}
+
+model User {
+  id               String    @id @default(cuid()) // id
+  username         String    @unique // 用户名
+  password         String // 密码 
+  name             String // 姓名
+  avatar           String? // 头像
+  email            String    @unique // 邮箱
+  mobile           String    @unique // 手机号
+  sex              Sex // 性别
+  address          String // 地址
+  nativeAddress    String // 籍贯
+  idCard           String    @unique // 身份证号码
+  isEnable         Boolean   @default(true) // 是否启用
+  loginIpList      String[] // 登录IP列表
+  lastLoginAt      DateTime? // 最后登录时间
+  loginFailCount   Int       @default(0) // 登录失败次数
+  loginLockedUnitl DateTime? // 登录锁定时间
+  joinTime         DateTime // 入职时间
+  leaveTime        DateTime? // 离职时间
+  position         String // 职位
+  department       String // 部门
+
+  createdAt DateTime @default(now())
+  createdBy String
+
+  updatedAt DateTime @updatedAt
+  updatedBy String?
+
+  deletedAt DateTime?
+  deletedBy String?
+
+  remark String?
+}
