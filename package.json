@@ -20,7 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "gen:prisma": "npx prisma generate --schema=prisma/schema.prisma",
     "geb:database": "npx prisma migrate dev --name init",
-    "gen:dto": "node src/prisma/generate-dto.mjs User"
+    "gen:dto": "node src/prisma/generate-dto.mjs"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
