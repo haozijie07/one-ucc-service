@@ -120,94 +120,9 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.UserScalarFieldEnum = {
-  id: 'id',
-  username: 'username',
-  password: 'password',
-  name: 'name',
-  isEnable: 'isEnable',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt',
-  createdBy: 'createdBy',
-  updatedBy: 'updatedBy',
-  deleteBy: 'deleteBy',
-  remark: 'remark'
-};
-
-exports.Prisma.RoleScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  code: 'code',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt',
-  createdBy: 'createdBy',
-  updatedBy: 'updatedBy',
-  deleteBy: 'deleteBy',
-  remark: 'remark'
-};
-
-exports.Prisma.MenuScalarFieldEnum = {
-  id: 'id',
-  parentId: 'parentId',
-  title: 'title',
-  routePath: 'routePath',
-  componentPath: 'componentPath',
-  icon: 'icon',
-  order: 'order',
-  type: 'type',
-  isHidden: 'isHidden',
-  keepAlive: 'keepAlive',
-  isEnable: 'isEnable',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt',
-  createdBy: 'createdBy',
-  updatedBy: 'updatedBy',
-  deleteBy: 'deleteBy',
-  remark: 'remark'
-};
-
-exports.Prisma.PermissionScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  name: 'name',
-  description: 'description',
-  menuId: 'menuId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt',
-  createdBy: 'createdBy',
-  updatedBy: 'updatedBy',
-  deleteBy: 'deleteBy',
-  remark: 'remark'
-};
-
-exports.Prisma.SortOrder = {
-  asc: 'asc',
-  desc: 'desc'
-};
-
-exports.Prisma.QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
-};
-
-exports.Prisma.NullsOrder = {
-  first: 'first',
-  last: 'last'
-};
-exports.MenuType = exports.$Enums.MenuType = {
-  MENU: 'MENU',
-  FUNCTION: 'FUNCTION'
-};
 
 exports.Prisma.ModelName = {
-  User: 'User',
-  Role: 'Role',
-  Menu: 'Menu',
-  Permission: 'Permission'
+
 };
 
 /**
