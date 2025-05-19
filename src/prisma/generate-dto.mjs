@@ -44,13 +44,14 @@ function parseModels(schema) {
       .map((line) => line.trim())
       .filter(Boolean)
       .map((line) => {
+        const description = line.split('//')[1]?.trim() || '';
         const [name, typeRaw] = line.split(/\s+/);
         if (name.startsWith('@') || !typeRaw || typeRaw.includes('[]'))
           return null;
 
         const type = typeRaw.replace('?', '');
         const isOptional = typeRaw.endsWith('?');
-        return { name, type, isOptional };
+        return { name, type, isOptional, description };
       })
       .filter(Boolean);
 
@@ -115,10 +116,13 @@ function generateDtoContent(modelName, fields, type = 'create', enums = {}) {
       lines.push(`  @${decorator}()`);
     }
 
+    lines.push(`  @ApiProperty({ description: '${field.description}' })`);
+
     lines.push(`  ${field.name}${isOptional ? '?' : ''}: ${tsType};\n`);
   });
 
   return `import { ${Array.from(imports).join(', ')} } from 'class-validator';
+  import { ApiProperty } from '@nestjs/swagger';
 
 export class ${type === 'create' ? 'Create' : 'Update'}${modelName}Dto {
 ${lines.join('\n')}
