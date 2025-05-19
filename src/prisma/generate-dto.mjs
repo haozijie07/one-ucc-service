@@ -58,37 +58,70 @@ function parseModels(schema) {
   });
 }
 
+function parseEnums(schema) {
+  const enums = schema.split('enum ').slice(1);
+  const result = {};
+
+  enums.forEach((block) => {
+    const [header, bodyRaw] = block.split('{');
+    const enumName = header.trim();
+    const body = bodyRaw.split('}')[0];
+
+    const values = body
+      .split('\n')
+      .map((line) => line.trim())
+      .filter(Boolean);
+
+    result[enumName] = values;
+  });
+
+  return result;
+}
+
 /**
  * 生成 DTO 文件内容
  */
-function generateDtoContent(modelName, fields, type = 'create') {
+function generateDtoContent(modelName, fields, type = 'create', enums = {}) {
   const imports = new Set();
   const lines = [];
 
   fields.forEach((field) => {
-    const decorator = typeMapValidator[field.type] || 'IsString';
+    let tsType = typeMapTs[field.type] || 'string';
+    let decorator = typeMapValidator[field.type] || 'IsString';
+    const isEnum = enums[field.type];
     const isOptional =
       field.isOptional ||
       (type === 'create' && defaultOptionalFields.includes(field.name)) ||
-      (type === 'update' && field.name !== 'id'); // update 默认都 optional，除了 id 可保留必填
+      (type === 'update' && field.name !== 'id');
 
-    imports.add(decorator);
+    if (isEnum) {
+      tsType = enums[field.type].map((v) => `'${v}'`).join(' | ');
+      decorator = 'IsIn';
+      imports.add('IsIn');
+    } else {
+      imports.add(decorator);
+    }
+
     if (isOptional) {
       imports.add('IsOptional');
       lines.push(`  @IsOptional()`);
     }
 
-    lines.push(
-      `  @${decorator}()\n  ${field.name}${isOptional ? '?' : ''}: ${
-        typeMapTs[field.type]
-      };`,
-    );
+    if (isEnum) {
+      lines.push(
+        `  @IsIn([${enums[field.type].map((v) => `'${v}'`).join(', ')}])`,
+      );
+    } else {
+      lines.push(`  @${decorator}()`);
+    }
+
+    lines.push(`  ${field.name}${isOptional ? '?' : ''}: ${tsType};\n`);
   });
 
   return `import { ${Array.from(imports).join(', ')} } from 'class-validator';
 
 export class ${type === 'create' ? 'Create' : 'Update'}${modelName}Dto {
-${lines.join('\n\n')}
+${lines.join('\n')}
 }
 `;
 }
@@ -126,12 +159,13 @@ function run(targetModelName) {
   const schemaPath = path.join(__dirname, '../../prisma/schema.prisma');
   const schema = fs.readFileSync(schemaPath, 'utf-8');
   const models = parseModels(schema);
+  const enums = parseEnums(schema);
 
   models.forEach(({ modelName, fields }) => {
     if (targetModelName && modelName !== targetModelName) return;
 
-    const createDto = generateDtoContent(modelName, fields, 'create');
-    const updateDto = generateDtoContent(modelName, fields, 'update');
+    const createDto = generateDtoContent(modelName, fields, 'create', enums);
+    const updateDto = generateDtoContent(modelName, fields, 'update', enums);
 
     writeDtoFile(modelName, 'create', createDto);
     writeDtoFile(modelName, 'update', updateDto);
