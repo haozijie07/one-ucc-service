@@ -116,7 +116,9 @@ function generateDtoContent(modelName, fields, type = 'create', enums = {}) {
       lines.push(`  @${decorator}()`);
     }
 
-    lines.push(`  @ApiProperty({ description: '${field.description}' })`);
+    lines.push(
+      `  @ApiProperty({ description: '${field.description}', required: ${!isOptional ? true : false} })`,
+    );
 
     lines.push(`  ${field.name}${isOptional ? '?' : ''}: ${tsType};\n`);
   });
