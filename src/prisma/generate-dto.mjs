@@ -139,18 +139,24 @@ function writeDtoFile(modelName, type, content) {
   const baseDir = path.join(__dirname, `../modules/${modelName.toLowerCase()}`);
   const dtoDir = path.join(baseDir, 'dto');
 
+  const backDir = path.join(baseDir, 'back');
+  const backDtoDir = path.join(backDir, 'dto');
+
   try {
     // 递归创建文件夹
     fs.mkdirSync(dtoDir, { recursive: true });
 
     const fileName = `${type}.dto.ts`;
     const filePath = path.join(dtoDir, fileName);
-    const backFilePath = path.join(dtoDir, 'back-' + fileName);
+    const backFilePath = path.join(backDtoDir, fileName);
 
     if (!fs.existsSync(filePath)) {
       fs.writeFileSync(filePath, content);
       console.log(`✅ 已生成: ${filePath}`);
     } else {
+      fs.mkdirSync(backDir, { recursive: true });
+      fs.mkdirSync(backDtoDir, { recursive: true });
+
       fs.writeFileSync(backFilePath, content);
       console.log(`⚠️ 已存在（生成备份）: ${backFilePath}`);
     }

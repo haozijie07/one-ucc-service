@@ -13,6 +13,7 @@ function generateBasicNestFile(modelName) {
   const filePrefix = modelName.toLowerCase();
 
   const moduleDir = path.join(__dirname, `../modules/${filePrefix}`);
+  const moduleBackDir = path.join(__dirname, `../modules/${filePrefix}/back`);
 
   fs.mkdirSync(moduleDir, { recursive: true });
 
@@ -143,7 +144,7 @@ function generateBasicNestFile(modelName) {
     const content = files[i].content;
 
     const filePath = path.join(moduleDir, filename);
-    const backFilePath = path.join(moduleDir, 'back-' + filename);
+    const backFilePath = path.join(moduleBackDir, filename);
 
     if (!fs.existsSync(filePath)) {
       fs.writeFileSync(filePath, content);
