@@ -56,8 +56,9 @@ function generateBasicNestFile(modelName) {
           }
           
           async delete(id:string) {
-            return prisma.${filePrefix}.delete({
-              where: { id, deletedAt: null }
+            return prisma.${filePrefix}.update({
+              where: { id, deletedAt: null },
+              data: { deletedAt: new Date() },
             })
           }
         }

@@ -32,8 +32,9 @@
           }
           
           async delete(id:string) {
-            return prisma.user.delete({
-              where: { id, deletedAt: null }
+            return prisma.user.update({
+              where: { id, deletedAt: null },
+              data: { deletedAt: new Date() },
             })
           }
         }
