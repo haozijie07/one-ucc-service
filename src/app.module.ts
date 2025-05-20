@@ -1,11 +1,15 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UserModule } from './modules/user/module';
+import { loadModulesFromDir } from './utils/auto-modules';
 
 @Module({
-  imports: [UserModule],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [],
 })
-export class AppModule {}
+export class AppModule {
+  static async registerDynamicModules() {
+    const dynamicModules = await loadModulesFromDir();
+    return {
+      module: AppModule,
+      imports: [...dynamicModules],
+    };
+  }
+}

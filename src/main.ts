@@ -7,7 +7,8 @@ import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const appModuleWithImports = await AppModule.registerDynamicModules();
+  const app = await NestFactory.create(appModuleWithImports);
 
   const config = new DocumentBuilder()
     .setTitle('haozi-ucc-swagger')
