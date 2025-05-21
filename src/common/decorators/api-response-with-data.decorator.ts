@@ -50,3 +50,37 @@ export const ApiOkResponseWithArray = <TModel extends Type<any>>(
     }),
   );
 };
+
+export const ApiOkResponseWithPagination = <TModel extends Type<any>>(
+  model: TModel,
+  description = '分页响应',
+) => {
+  return applyDecorators(
+    ApiOkResponse({
+      description,
+      schema: {
+        allOf: [
+          { $ref: getSchemaPath(CommonResponse) },
+          {
+            type: 'object',
+            properties: {
+              data: {
+                type: 'object',
+                properties: {
+                  total: {
+                    type: 'number',
+                    example: 100,
+                  },
+                  data: {
+                    type: 'array',
+                    items: { $ref: getSchemaPath(model) },
+                  },
+                },
+              },
+            },
+          },
+        ],
+      },
+    }),
+  );
+};

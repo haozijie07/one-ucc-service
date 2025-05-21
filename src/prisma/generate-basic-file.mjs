@@ -28,6 +28,8 @@ function generateBasicNestFile(modelName) {
         import { Create${className}Dto } from './dto/create.dto';
         import { Update${className}Dto } from './dto/update.dto';
         import prisma from 'src/prisma';
+        import { buildWhereInput } from 'src/utils/query-builder';
+        import { QueryDto } from 'src/common/dto/query-condition.dto';
 
         @Injectable()
         export class ${className}Service {
@@ -62,6 +64,26 @@ function generateBasicNestFile(modelName) {
               data: { deletedAt: new Date() },
             })
           }
+
+          async pageList(query: QueryDto) {
+            const where = buildWhereInput(query.conditions || []);
+            const skip = (query.pageIndex - 1) * query.pageSize;
+            const take = query.pageSize;
+
+            const orderBy = query.sortBy
+              ? { [query.sortBy]: query.sortOrder ?? 'asc' }
+              : undefined;
+
+            const [list, total] = await prisma.$transaction([
+              prisma.${filePrefix}.findMany({ where, skip, take, orderBy }),
+              prisma.${filePrefix}.count({ where }),
+            ]);
+
+            return {
+              data: list,
+              total,
+            };
+          }
         }
 
         export default ${className}Service;
@@ -84,7 +106,9 @@ function generateBasicNestFile(modelName) {
         import {
           ApiOkResponseWithData,
           ApiOkResponseWithArray,
+          ApiOkResponseWithPagination,
         } from 'src/common/decorators/api-response-with-data.decorator';
+        import { QueryDto } from 'src/common/dto/query-condition.dto';
 
         @ApiTags('${filePrefix}')
         @ApiExtraModels(CommonResponse, Update${className}Dto)
@@ -128,6 +152,13 @@ function generateBasicNestFile(modelName) {
           async delete(@Param('id') id:string) {
             return this.service.delete(id)
           }
+
+          @Post('/pageList')
+            @ApiOperation({ summary: '分页查询 ${filePrefix}' })
+            @ApiOkResponseWithPagination(Update${className}Dto, '返回分页查询的 ${filePrefix}')
+            async pageList(@Body() data: QueryDto) {
+              return this.service.pageList(data);
+            }
         }
 
         export default ${className}Controller;
