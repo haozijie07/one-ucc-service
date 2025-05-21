@@ -75,14 +75,16 @@ function generateBasicNestFile(modelName) {
           ApiTags,
           ApiOperation,
           ApiParam,
-          ApiResponse,
           ApiExtraModels,
-          getSchemaPath,
         } from '@nestjs/swagger';
         import { ${className}Service } from './service';
         import { Create${className}Dto } from './dto/create.dto';
         import { Update${className}Dto } from './dto/update.dto';
         import { CommonResponse } from 'src/common/dto/common-response.dto';
+        import {
+          ApiOkResponseWithData,
+          ApiOkResponseWithArray,
+        } from 'src/common/decorators/api-response-with-data.decorator';
 
         @ApiTags('${filePrefix}')
         @ApiExtraModels(CommonResponse, Update${className}Dto)
@@ -93,45 +95,14 @@ function generateBasicNestFile(modelName) {
 
           @Post()
           @ApiOperation({ summary: '新增 ${filePrefix}' })
-          @ApiResponse({
-            description: '返回新增 ${filePrefix}',
-            schema: {
-              allOf: [
-                { $ref: getSchemaPath(CommonResponse) },
-                {
-                  properties: {
-                    data: {
-                      $ref: getSchemaPath(Update${className}Dto),
-                    },
-                  },
-                },
-              ],
-            },
-          })
+          @ApiOkResponseWithData(Update${className}Dto, '返回新增的 ${filePrefix}')
           async create(@Body() data: Create${className}Dto) {
             return this.service.create(data)
           }
 
           @Get()
           @ApiOperation({ summary: '获取所有 ${filePrefix}' })
-          @ApiResponse({
-            description: '返回所有 ${filePrefix}',
-            
-            schema: {
-              allOf: [
-                { $ref: getSchemaPath(CommonResponse) },
-                {
-                  type: 'object',
-                  properties: {
-                    data: {
-                      type: 'array',
-                      items: { $ref: getSchemaPath(Update${className}Dto) },
-                    },
-                  },
-                },
-              ],
-            },
-          })
+          @ApiOkResponseWithArray(Update${className}Dto, '返回所有 ${filePrefix}')
           async findAll() {
             return this.service.findAll()
           }
@@ -139,63 +110,21 @@ function generateBasicNestFile(modelName) {
           @Get(':id')
           @ApiOperation({ summary: '根据 id 获取 ${className} 详情' })
           @ApiParam({ name: 'id', description: 'id' })
-          @ApiResponse({
-            description: '返回 ${filePrefix} 详情',
-            schema: {
-              allOf: [
-                { $ref: getSchemaPath(CommonResponse) },
-                {
-                  properties: {
-                    data: {
-                      $ref: getSchemaPath(Update${className}Dto),
-                    },
-                  },
-                },
-              ],
-            },
-          })
+          @ApiOkResponseWithData(Update${className}Dto, '返回 ${filePrefix} 详情')
           async findById(@Param('id') id:string) {
             return this.service.findById(id)
           }
 
           @Patch(':id')
           @ApiOperation({ summary: '修改 ${filePrefix}' })
-          @ApiResponse({
-            description: '返回修改的 ${filePrefix}',
-            schema: {
-              allOf: [
-                { $ref: getSchemaPath(CommonResponse) },
-                {
-                  properties: {
-                    data: {
-                      $ref: getSchemaPath(Update${className}Dto),
-                    },
-                  },
-                },
-              ],
-            },
-          })
+          @ApiOkResponseWithData(Update${className}Dto, '返回修改的 ${filePrefix}')
           async update(@Param('id') id:string, @Body() data: Update${className}Dto) {
             return this.service.update(id, data)
           }
 
           @Delete(':id')
           @ApiOperation({ summary: '根据 ID 删除 ${filePrefix}' })
-          @ApiResponse({
-            description: '返回删除的 ${filePrefix}',
-            schema: {
-              allOf: [
-                { $ref: getSchemaPath(CommonResponse) },
-                {
-                  properties: {
-                    data: {
-                      $ref: getSchemaPath(Update${className}Dto),
-                    },
-                  },
-                },
-              ],
-            },
-          })
+          @ApiOkResponseWithData(Update${className}Dto, '返回删除的 ${filePrefix}')
           async delete(@Param('id') id:string) {
             return this.service.delete(id)
           }
