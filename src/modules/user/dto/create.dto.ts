@@ -2,11 +2,6 @@ import { IsString, IsOptional, IsIn, IsBoolean, IsDate, IsInt } from 'class-vali
   import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto {
-  @IsOptional()
-  @IsString()
-  @ApiProperty({ description: 'id', required: false })
-  id?: string;
-
   @IsString()
   @ApiProperty({ description: '用户名', required: true })
   username: string;
