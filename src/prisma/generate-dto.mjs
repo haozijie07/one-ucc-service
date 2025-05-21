@@ -87,6 +87,7 @@ function generateDtoContent(modelName, fields, type = 'create', enums = {}) {
   const lines = [];
 
   fields.forEach((field) => {
+    if (type === 'create' && field.name === 'id') return;
     let tsType = typeMapTs[field.type] || 'string';
     let decorator = typeMapValidator[field.type] || 'IsString';
     const isEnum = enums[field.type];
