@@ -1,5 +1,12 @@
-import { IsString, IsOptional, IsIn, IsBoolean, IsDate, IsInt } from 'class-validator';
-  import { ApiProperty } from '@nestjs/swagger';
+import {
+  IsString,
+  IsOptional,
+  IsIn,
+  IsBoolean,
+  IsDate,
+  IsInt,
+} from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateUserDto {
   @IsString()
@@ -130,5 +137,4 @@ export class UpdateUserDto {
   @IsString()
   @ApiProperty({ description: '', required: false })
   remark?: string;
-
 }
